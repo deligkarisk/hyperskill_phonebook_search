@@ -2,6 +2,8 @@ package phonebook.sort;
 
 import phonebook.domain.PhoneBookEntry;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,13 +12,15 @@ import java.util.List;
 // Interfaces.
 public class BubbleSort {
 
-    public List<PhoneBookEntry> sortPhoneBook(List<PhoneBookEntry> unsortedPhoneBook, boolean ascending) {
+    public List<PhoneBookEntry> sortPhoneBook(List<PhoneBookEntry> unsortedPhoneBook, boolean ascending) throws IOException {
 
         if (!ascending) {
             throw new RuntimeException("Only ascending sorting is currently supported");
         }
 
         List<PhoneBookEntry> toSortPhoneBook = new ArrayList<PhoneBookEntry>(unsortedPhoneBook);
+
+        FileWriter sortDetailsWriter = new FileWriter("bubbleSortDetails.txt");
 
         PhoneBookEntry tempEntry;
         boolean changesOccuredInLastLoop;
@@ -36,9 +40,13 @@ public class BubbleSort {
                 }
             }
             countIters++;
-            System.out.println("Finished " + countIters + " iteration, with " + numberOfChangesInIter + " changes");
+            String message = "Finished " + countIters + " iteration, with " + numberOfChangesInIter + " changes";
+            System.out.println(message);
+            sortDetailsWriter.write(message + System.lineSeparator());
+
         } while (changesOccuredInLastLoop);
 
+        sortDetailsWriter.close();
         return toSortPhoneBook;
 
     }

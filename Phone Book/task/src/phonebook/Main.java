@@ -38,13 +38,14 @@ public class Main {
         }
         System.out.println("Loaded find list");
 
+
         List<PhoneBookEntry> sortedPhoneBook = bubbleSort.sortPhoneBook(directoryList, true);
 
-        FileWriter writer = new FileWriter("output.txt");
+        FileWriter sortedDirectoryWriter = new FileWriter("output.txt");
         for(PhoneBookEntry entry: sortedPhoneBook) {
-            writer.write(entry.getEntry() + System.lineSeparator());
+            sortedDirectoryWriter.write(entry.getEntry() + System.lineSeparator());
         }
-        writer.close();
+        sortedDirectoryWriter.close();
 
 
 
