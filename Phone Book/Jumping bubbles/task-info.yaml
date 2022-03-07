@@ -135,16 +135,19 @@ files:
     \ less than the first linear search time.\");\n            }\n        }\n    \
     \    \n        return CheckResult.correct();\n    }\n}\n"
   learner_created: false
+- name: src/phonebook/search/LinearSearchString.java
+  visible: true
+  learner_created: true
 - name: src/phonebook/search/JumpSearchNumeric.java
   visible: true
   learner_created: true
 - name: src/phonebook/domain/PhoneBookEntry.java
   visible: true
   learner_created: true
-- name: src/phonebook/sort/BubbleSort.java
+- name: src/phonebook/domain/TimeDuration.java
   visible: true
   learner_created: true
-- name: src/phonebook/domain/Entry.java
+- name: src/phonebook/sort/BubbleSort.java
   visible: true
   learner_created: true
 feedback_link: https://hyperskill.org/learn/step/5483#comment

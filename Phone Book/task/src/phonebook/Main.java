@@ -1,6 +1,9 @@
 package phonebook;
 
 import phonebook.domain.PhoneBookEntry;
+import phonebook.domain.TimeDuration;
+import phonebook.search.JumpSearchString;
+import phonebook.search.LinearSearchString;
 import phonebook.search.Search;
 import phonebook.sort.BubbleSort;
 
@@ -10,12 +13,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class Main {
 
     static BubbleSort bubbleSort = new BubbleSort();
-
+    static LinearSearchString linearSearchString = new LinearSearchString();
+    static JumpSearchString jumpSearchString = new JumpSearchString();
 
 
     public static void main(String[] args) throws IOException {
@@ -32,80 +37,83 @@ public class Main {
 
         // Load entries from find file
         Scanner findScanner = new Scanner(findFile);
-        List<PhoneBookEntry> findList = new ArrayList<PhoneBookEntry>();
+        List<String> findList = new ArrayList<String>();
         while (findScanner.hasNext()) {
-            findList.add(new PhoneBookEntry(findScanner.nextLine()));
+            findList.add(findScanner.nextLine());
         }
         System.out.println("Loaded find list");
 
 
-        List<PhoneBookEntry> sortedPhoneBook = bubbleSort.sortPhoneBook(directoryList, true);
-
-        FileWriter sortedDirectoryWriter = new FileWriter("output.txt");
-        for(PhoneBookEntry entry: sortedPhoneBook) {
-            sortedDirectoryWriter.write(entry.getEntry() + System.lineSeparator());
+        long startTimeLinear = System.currentTimeMillis();
+        int countFindLinearSearch = 0;
+        System.out.println("Start searching (linear search)...");
+        for (String entryToFind : findList) {
+            if (linearSearchString.search(directoryList, entryToFind) > -1) {
+                countFindLinearSearch++;
+            }
         }
-        sortedDirectoryWriter.close();
+        long stopTimeLinear = System.currentTimeMillis();
+        TimeDuration timeTakenLinear = new TimeDuration(startTimeLinear, stopTimeLinear);
+
+        System.out.println("Found " + countFindLinearSearch + " / " + findList.size() +
+                " entries. Time taken: " +
+                timeTakenLinear.getMinutes() + " min. " +
+                timeTakenLinear.getSeconds() + " sec. " +
+                timeTakenLinear.getMilliseconds() + " ms.");
 
 
+        System.out.println("Start searching (bubble sort + jump search)...");
+        long startTimeSorting = System.currentTimeMillis();
+        long maxDuration = (stopTimeLinear - startTimeLinear) * 10;
+        Optional<List<PhoneBookEntry>> optionalSortedPhoneBook = bubbleSort.sortPhoneBook(directoryList, true,
+                maxDuration,
+                false);
+        TimeDuration timeTakenSort = new TimeDuration(startTimeSorting, System.currentTimeMillis());
 
+        // prepare for the search
+        int countFind = 0;
+        long startTimeSearch;
 
+        startTimeSearch = System.currentTimeMillis();
+        if (optionalSortedPhoneBook.isPresent()) {
+            List<PhoneBookEntry> sortedPhoneBook = optionalSortedPhoneBook.get();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-
-        // Find entries
-        System.out.println("Start searching...");
-        int foundEntries = 0;
-        long preTime = System.currentTimeMillis();
-
-        for (String entry : findList) {
-            // System.out.println("Searching for: " + entry);
-            for (String directoryEntry : directoryList) {
-                if (directoryEntry.contains(entry)) {
-                  //  System.out.println("Entry found");
-                    foundEntries++;
-                    break;
+            for (String entryToFind : findList) {
+                if (jumpSearchString.search(sortedPhoneBook, entryToFind, false) > -1) {
+                    countFind++;
+                }
+            }
+        } else {
+            for (String entryToFind : findList) {
+                if (linearSearchString.search(directoryList, entryToFind) > -1) {
+                    countFind++;
                 }
             }
         }
-        long postTime = System.currentTimeMillis();
-        long timePassed = (postTime - preTime);
-        long timePassedSec = timePassed / 1000;
-        long remainingMillisecs = timePassed % 1000;
-        long passedMin = timePassedSec / 60;
-        long remainingSecs = timePassedSec % 60;
+
+        TimeDuration timeTakenSearch = new TimeDuration(startTimeSearch, System.currentTimeMillis());
+        TimeDuration timeTakenTotal = new TimeDuration(startTimeSorting, System.currentTimeMillis());
+        System.out.println("Found " + countFind + " / " + findList.size() + " entries. Time taken: " +
+                timeTakenTotal.getMinutes() + " min. " +
+                timeTakenTotal.getSeconds() + " sec. " +
+                timeTakenTotal.getMilliseconds() + " ms.");
 
 
+        System.out.print("Sorting time: " +
+                timeTakenSort.getMinutes() + " min. " +
+                timeTakenSort.getSeconds() + " sec. " +
+                timeTakenSort.getMilliseconds() + " ms.");
 
-        System.out.println("Found " + foundEntries + " / " + findList.size() + " entries. Time taken: " + passedMin + " min. " + remainingSecs + " sec. " + remainingMillisecs + " ms.");*/
+        if (optionalSortedPhoneBook.isEmpty()) {
+            System.out.println(" - STOPPED, moved to linear search");
+        }
+
+        System.out.println("Searching time: " +
+                timeTakenSearch.getMinutes() + " min. " +
+                timeTakenSearch.getSeconds() + " sec. " +
+                timeTakenSearch.getMilliseconds() + " ms.");
 
 
     }
-
-
 }
 
