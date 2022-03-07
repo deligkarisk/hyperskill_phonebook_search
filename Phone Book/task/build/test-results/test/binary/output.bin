@@ -1,10 +1,10 @@
 [1;31m
 Start test 1[0m
 Loaded directory
-Start searching...
-;Found 500 / 500 entries. Time taken: 0 min. 2 sec. 233 ms.
-[1;31m
-Start test 2[0m
-Loaded directory
-Start searching...
-;Found 500 / 500 entries. Time taken: 0 min. 1 sec. 834 ms.
+Loaded find list
+#Start searching (linear search)...
+<Found 500 / 500 entries. Time taken: 0 min. 21 sec. 937 ms.
+/Start searching (bubble sort + jump search)...
+;Found 500 / 500 entries. Time taken: 4 min. 1 sec. 334 ms.
+GSorting time: 3 min. 39 sec. 516 ms. - STOPPED, moved to linear search
+'Searching time: 0 min. 21 sec. 818 ms.
