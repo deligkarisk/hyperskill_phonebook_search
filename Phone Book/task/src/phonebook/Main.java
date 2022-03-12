@@ -6,21 +6,21 @@ import phonebook.search.JumpSearchString;
 import phonebook.search.LinearSearchString;
 import phonebook.search.Search;
 import phonebook.sort.BubbleSort;
+import phonebook.sort.QuickSort;
+import phonebook.sort.QuickSortInteger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
 
     static BubbleSort bubbleSort = new BubbleSort();
     static LinearSearchString linearSearchString = new LinearSearchString();
     static JumpSearchString jumpSearchString = new JumpSearchString();
+    static QuickSort quickSort = new QuickSort();
 
 
     public static void main(String[] args) throws IOException {
@@ -44,6 +44,24 @@ public class Main {
         System.out.println("Loaded find list");
 
 
+        System.out.println("Unsorted array:");
+        System.out.println(Arrays.toString(directoryList.subList(0,10).toArray()));
+
+        quickSort.sortPhoneBook(directoryList.subList(0,10));
+        System.out.println("Sorted array:");
+        System.out.println(Arrays.toString(directoryList.subList(0,10).toArray()));
+
+
+
+
+
+
+
+
+
+
+
+/*
         long startTimeLinear = System.currentTimeMillis();
         int countFindLinearSearch = 0;
         System.out.println("Start searching (linear search)...");
@@ -113,6 +131,8 @@ public class Main {
                 timeTakenSearch.getSeconds() + " sec. " +
                 timeTakenSearch.getMilliseconds() + " ms.");
 
+
+    }*/
 
     }
 }

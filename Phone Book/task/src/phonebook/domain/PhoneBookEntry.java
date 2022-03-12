@@ -27,4 +27,8 @@ public class PhoneBookEntry implements Comparable<PhoneBookEntry>{
         return this.getName().compareTo(otherEntry.getName());
     }
 
+    @Override
+    public String toString() {
+        return this.getName();
+    }
 }
