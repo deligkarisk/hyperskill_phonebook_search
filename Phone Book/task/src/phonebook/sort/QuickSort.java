@@ -27,8 +27,8 @@ public class QuickSort {
 
     private int partition(List<PhoneBookEntry> listToPartition, int leftBoundary, int rightBoundary) {
 
-        System.out.println("Before partition:");
-        System.out.println(Arrays.toString(listToPartition.toArray()));
+      //  System.out.println("Before partition:");
+       // System.out.println(Arrays.toString(listToPartition.toArray()));
 
 
         // temporary pivot position(a.k.a index of last element found to be smaller than the pivot value), starts
@@ -52,8 +52,8 @@ public class QuickSort {
         listToPartition.set(postPartitionPivotPosition, listToPartition.get(pivotPosition));
         listToPartition.set(pivotPosition, tempEntry);
 
-        System.out.println("After partition:");
-        System.out.println(Arrays.toString(listToPartition.toArray()));
+    //    System.out.println("After partition:");
+    //    System.out.println(Arrays.toString(listToPartition.toArray()));
 
 
         return postPartitionPivotPosition;

@@ -1,10 +1,12 @@
 package phonebook.search;
 
+import phonebook.domain.PhoneBookEntry;
+
 import java.util.List;
 
 public interface Search {
 
-    int search(String phoneNumber, List<String> directory);
+    int search(List<PhoneBookEntry> phoneBookEntries, String entryToFind);
 
 
 

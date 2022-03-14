@@ -3,8 +3,12 @@
 Loaded directory
 Loaded find list
 #Start searching (linear search)...
-<Found 500 / 500 entries. Time taken: 0 min. 21 sec. 937 ms.
+<Found 500 / 500 entries. Time taken: 0 min. 20 sec. 469 ms.
 /Start searching (bubble sort + jump search)...
-;Found 500 / 500 entries. Time taken: 4 min. 1 sec. 334 ms.
-GSorting time: 3 min. 39 sec. 516 ms. - STOPPED, moved to linear search
-'Searching time: 0 min. 21 sec. 818 ms.
+<Found 500 / 500 entries. Time taken: 3 min. 44 sec. 978 ms.
+GSorting time: 3 min. 24 sec. 717 ms. - STOPPED, moved to linear search
+'Searching time: 0 min. 20 sec. 261 ms.
+0Start searching (quick sort + binary search)...
+;Found 500 / 500 entries. Time taken: 0 min. 5 sec. 469 ms.
+$Sorting time: 0 min. 5 sec. 466 ms.
+$Searching time: 0 min. 0 sec. 3 ms.

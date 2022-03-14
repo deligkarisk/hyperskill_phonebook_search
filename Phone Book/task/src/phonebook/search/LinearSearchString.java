@@ -4,7 +4,7 @@ import phonebook.domain.PhoneBookEntry;
 
 import java.util.List;
 
-public class LinearSearchString {
+public class LinearSearchString implements Search{
 
     public int search(List<PhoneBookEntry> catalog, String stringToFind) {
 

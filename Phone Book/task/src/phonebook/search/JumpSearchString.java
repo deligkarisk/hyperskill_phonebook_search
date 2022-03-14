@@ -4,14 +4,11 @@ import phonebook.domain.PhoneBookEntry;
 
 import java.util.List;
 
-public class JumpSearchString {
+public class JumpSearchString implements Search {
 
-    public int search(List<PhoneBookEntry> sortedPhonebook, String entryToFind, boolean arrayIsAscending) {
+    public int search(List<PhoneBookEntry> sortedPhonebook, String entryToFind) {
         int numberOfComparisons = 0;
 
-        if (arrayIsAscending) {
-            throw new RuntimeException("Only search in descending arrays has been implemented here.");
-        }
 
         // Search in descending array
         int blockSize = (int) Math.floor(Math.sqrt(sortedPhonebook.size()));
