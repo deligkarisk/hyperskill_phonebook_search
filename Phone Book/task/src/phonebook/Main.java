@@ -2,6 +2,7 @@ package phonebook;
 
 import phonebook.domain.PhoneBookEntry;
 import phonebook.domain.TimeDuration;
+import phonebook.hash.HashTable;
 import phonebook.search.BinarySearchString;
 import phonebook.search.JumpSearchString;
 import phonebook.search.LinearSearchString;
@@ -29,6 +30,7 @@ public class Main {
     static File findFile = new File("/home/kosmas-deligkaris/find.txt");
     static List<PhoneBookEntry> directoryList = new ArrayList<PhoneBookEntry>();
     static List<String> findList = new ArrayList<String>();
+    static HashTable hashTable;
 
 
     public static void main(String[] args) throws IOException {
@@ -82,10 +84,38 @@ public class Main {
         printPerformanceDetails(countFindStep3, findList.size(), timeTakenTotalStep3);
         printSearchAndSortDetails(timeTakenSortStep3, timeTakenSearchStep3, true);
 
+
+        System.out.println("Start searching (hash table)...");
+        hashTable = new HashTable((int) (1.2*directoryList.size()));
+
+
+        long startTimeFitDataToHashTable = System.currentTimeMillis();
+        fitDirectoryDataToHashTable(directoryList, hashTable);
+        TimeDuration timeTakenFitDataToHashTable = new TimeDuration(startTimeFitDataToHashTable,
+                System.currentTimeMillis());
+        long startTimeFindDataInHashTable = System.currentTimeMillis();
+        int countFindHashTable = findAllEntries(hashTable, findList);
+        TimeDuration timeTakenSearchInHashTable = new TimeDuration(startTimeFindDataInHashTable,
+                System.currentTimeMillis());
+        TimeDuration timeTakenTotalHashTable = new TimeDuration(startTimeFitDataToHashTable,
+                System.currentTimeMillis());
+        printPerformanceDetails(countFindHashTable, findList.size(), timeTakenTotalHashTable);
+        printHashAndSearchDetails(timeTakenFitDataToHashTable, timeTakenSearchInHashTable, true);
     }
 
 
 
+
+
+
+
+
+
+    private static void fitDirectoryDataToHashTable(List<PhoneBookEntry> directoryList, HashTable hashTable) {
+        for (PhoneBookEntry entry: directoryList) {
+            hashTable.add(entry);
+        }
+    }
 
 
 
@@ -119,6 +149,26 @@ public class Main {
         }
 
 
+    private static void printHashAndSearchDetails(TimeDuration timeTakenSort, TimeDuration timeTakenSearch,
+                                                  boolean sortCompleted) {
+        System.out.print("Creating time: " +
+                timeTakenSort.getMinutes() + " min. " +
+                timeTakenSort.getSeconds() + " sec. " +
+                timeTakenSort.getMilliseconds() + " ms.");
+
+        if (!sortCompleted) {
+            System.out.println(" - STOPPED, moved to linear search");
+        } else {
+            System.out.println("");
+        }
+
+        System.out.println("Searching time: " +
+                timeTakenSearch.getMinutes() + " min. " +
+                timeTakenSearch.getSeconds() + " sec. " +
+                timeTakenSearch.getMilliseconds() + " ms.");
+    }
+
+
 
     private static void loadData(File directoryFile, File findFile) throws FileNotFoundException {
         // Load directory into memory
@@ -134,6 +184,20 @@ public class Main {
             findList.add(findScanner.nextLine());
         }
         System.out.println("Loaded find list");
+    }
+
+
+    private static int findAllEntries(HashTable hashTable, List<String> findList) {
+        int countFind = 0;
+
+        for (String entryToFind: findList) {
+            if (hashTable.find(entryToFind) > - 1) {
+                countFind++;
+            }
+        }
+
+        return countFind;
+
     }
 
     private static int findAllEntries(Search searchAlgorithm, List<PhoneBookEntry> fullPhonebook,
@@ -153,18 +217,6 @@ public class Main {
     }
 
 
-/*
-
-private static int getCountFind(List<PhoneBookEntry> sortedPhoneBook, int countFind) {
-
-        for (String entryToFind : findList) {
-        if (jumpSearch.search(sortedPhoneBook, entryToFind) > -1) {
-        countFind++;
-        }
-        }
-        return countFind;
-        }
-*/
 
 
 

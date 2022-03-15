@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="PhoneBookTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-03-14T02:00:13" hostname="kd-work" time="251.65">
+<testsuite name="PhoneBookTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-03-15T04:35:59" hostname="kd-work" time="255.324">
   <properties/>
-  <testcase name="start" classname="PhoneBookTest" time="251.65"/>
+  <testcase name="start" classname="PhoneBookTest" time="255.324"/>
   <system-out><![CDATA[?[1;31m
 Start test 1?[0m
 Loaded directory
 Loaded find list
 Start searching (linear search)...
-Found 500 / 500 entries. Time taken: 0 min. 20 sec. 469 ms.
+Found 500 / 500 entries. Time taken: 0 min. 20 sec. 743 ms.
 Start searching (bubble sort + jump search)...
-Found 500 / 500 entries. Time taken: 3 min. 44 sec. 978 ms.
-Sorting time: 3 min. 24 sec. 717 ms. - STOPPED, moved to linear search
-Searching time: 0 min. 20 sec. 261 ms.
+Found 500 / 500 entries. Time taken: 3 min. 48 sec. 114 ms.
+Sorting time: 3 min. 27 sec. 473 ms. - STOPPED, moved to linear search
+Searching time: 0 min. 20 sec. 641 ms.
 Start searching (quick sort + binary search)...
-Found 500 / 500 entries. Time taken: 0 min. 5 sec. 469 ms.
-Sorting time: 0 min. 5 sec. 466 ms.
+Found 500 / 500 entries. Time taken: 0 min. 5 sec. 257 ms.
+Sorting time: 0 min. 5 sec. 254 ms.
 Searching time: 0 min. 0 sec. 3 ms.
+Start searching (hash table)...
+Found 500 / 500 entries. Time taken: 0 min. 0 sec. 447 ms.
+Creating time: 0 min. 0 sec. 446 ms.
+Searching time: 0 min. 0 sec. 1 ms.
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
