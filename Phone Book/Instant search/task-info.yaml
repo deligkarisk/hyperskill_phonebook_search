@@ -145,6 +145,353 @@ files:
     \ CheckResult.wrong(\"Your hashtable works slower, than quick sort + binary search.\"\
     );\n        }\n        return CheckResult.correct();\n    }\n}\n"
   learner_created: false
+- name: src/phonebook/search/LinearSearchString.java
+  visible: true
+  text: |
+    package phonebook.search;
+
+    import phonebook.domain.PhoneBookEntry;
+
+    import java.util.List;
+
+    public class LinearSearchString implements Search{
+
+        public int search(List<PhoneBookEntry> catalog, String stringToFind) {
+
+            for (int i = 0; i < catalog.size(); i++) {
+                if (catalog.get(i).getName().equals(stringToFind)) {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+    }
+  learner_created: true
+- name: src/phonebook/sort/QuickSort.java
+  visible: true
+  text: |
+    package phonebook.sort;
+
+    import phonebook.domain.PhoneBookEntry;
+
+    import java.io.IOException;
+    import java.util.*;
+
+    public class QuickSort {
+
+        public void sortPhoneBook(List<PhoneBookEntry> toSortPhoneBook) {
+
+
+            if (toSortPhoneBook.size() <= 1) {
+                return;
+            }
+
+            int leftBoundary = 0;
+            int rightBoundary = toSortPhoneBook.size() - 1;
+            int pivot = partition(toSortPhoneBook, leftBoundary, rightBoundary); // partition the whole list at first
+
+            List<PhoneBookEntry> leftSubList = toSortPhoneBook.subList(leftBoundary, pivot);
+            List<PhoneBookEntry> rightSubList = toSortPhoneBook.subList(pivot + 1, toSortPhoneBook.size());
+
+            sortPhoneBook(leftSubList);
+            sortPhoneBook(rightSubList);
+        }
+
+        private int partition(List<PhoneBookEntry> listToPartition, int leftBoundary, int rightBoundary) {
+
+          //  System.out.println("Before partition:");
+           // System.out.println(Arrays.toString(listToPartition.toArray()));
+
+
+            // temporary pivot position(a.k.a index of last element found to be smaller than the pivot value), starts
+            // with -1.
+            int postPartitionPivotPosition = -1;
+            int pivotPosition = listToPartition.size() - 1;
+            int searchRightBoundary = rightBoundary - 1 ; // since the pivot is the last element
+
+
+            for (int i = leftBoundary; i < rightBoundary; i++) {
+                if (listToPartition.get(i).compareTo(listToPartition.get(pivotPosition)) <= 0) {
+                    postPartitionPivotPosition++;
+                    PhoneBookEntry tempEntry = listToPartition.get(postPartitionPivotPosition);
+                    listToPartition.set(postPartitionPivotPosition, listToPartition.get(i));
+                    listToPartition.set(i, tempEntry);
+                }
+            }
+
+            postPartitionPivotPosition++;
+            PhoneBookEntry tempEntry = listToPartition.get(postPartitionPivotPosition);
+            listToPartition.set(postPartitionPivotPosition, listToPartition.get(pivotPosition));
+            listToPartition.set(pivotPosition, tempEntry);
+
+        //    System.out.println("After partition:");
+        //    System.out.println(Arrays.toString(listToPartition.toArray()));
+
+
+            return postPartitionPivotPosition;
+
+        }
+
+    }
+  learner_created: true
+- name: src/phonebook/search/JumpSearchNumeric.java
+  visible: true
+  text: |
+    package phonebook.search;
+
+    public class JumpSearchNumeric {
+
+        public int search(int[] sortedArray, int numberToFind, boolean arrayIsAscending) {
+            int numberOfComparisons = 0;
+
+            if (arrayIsAscending) {
+                throw new RuntimeException("Only search in descending arrays has been implemented here.");
+            }
+
+            // Search in descending array
+            int blockSize = (int) Math.floor(Math.sqrt(sortedArray.length));
+
+            System.out.println("Looking for number: " + numberToFind);
+
+            System.out.println("Checking if the number is larger than the largest number of the array.");
+            if (sortedArray[0] < numberToFind) {
+                return -1;
+            }
+
+            System.out.println("Checking if the number is in the first element of the array.");
+            if (sortedArray[0] == numberToFind) {
+                return 0;
+            }
+
+            int currentBlock = 0;
+            while (blockSize * (currentBlock + 1) < sortedArray.length) {
+                currentBlock++;
+                int rightIndex = currentBlock*blockSize + 1;
+                int leftIndex = rightIndex - blockSize;
+                System.out.println("Moving to the next block with right index: " + rightIndex + " and left index: " + leftIndex);
+
+                // if the smallest number, i.e. the right edge number of the current block is larger than the number we
+                // want to find, then we need to move to the next block.
+                if (sortedArray[rightIndex] > numberToFind) {
+                    numberOfComparisons++;
+                    continue;
+                }
+
+
+                // if the right index is smaller than the number we are looking for, then the number may be in this block.
+                if (sortedArray[rightIndex] <= numberToFind) {
+                    System.out.println("The number we are looking for may be in this block.");
+                    for (int k = rightIndex; k > rightIndex - blockSize; k--) {
+                        System.out.println("Comparing with element of index:" + k);
+                        if (sortedArray[k] == numberToFind) {
+                            return k;
+                        }
+                        numberOfComparisons++;
+
+                        if ( k - 1 == rightIndex - blockSize) {
+                            System.out.println("This was the last iteration for this block.");
+                        }
+                    }
+                }
+            }
+
+            // Try the remaining elements, if there are any left.
+            for (int lastBlockIndex = sortedArray.length - 1; lastBlockIndex > currentBlock*blockSize + 1; lastBlockIndex--) {
+                if (sortedArray[lastBlockIndex] == numberToFind) {
+                    return lastBlockIndex;
+                }
+                numberOfComparisons++;
+            }
+
+            System.out.println("Number not found");
+            return -1;
+        }
+    }
+  learner_created: true
+- name: src/phonebook/domain/PhoneBookEntry.java
+  visible: true
+  text: |
+    package phonebook.domain;
+
+    public class PhoneBookEntry implements Comparable<PhoneBookEntry>{
+
+        String entry;
+
+
+        public PhoneBookEntry(String entry) {
+            this.entry = entry;
+        }
+
+
+        public String getName() {
+            return entry.split(" ", 2)[1];
+        }
+
+        public String getNumber() {
+            return entry.split(" ", 2)[0];
+        }
+
+        public String getEntry() {
+            return entry;
+        }
+
+        @Override
+        public int compareTo(PhoneBookEntry otherEntry) {
+            return this.getName().compareTo(otherEntry.getName());
+        }
+
+        @Override
+        public String toString() {
+            return this.getName();
+        }
+    }
+  learner_created: true
+- name: src/phonebook/search/BinarySearchString.java
+  visible: true
+  text: |
+    package phonebook.search;
+
+    import phonebook.domain.PhoneBookEntry;
+
+    import java.util.List;
+
+    public class BinarySearchString implements Search{
+
+        public int search(List<PhoneBookEntry> sortedPhonebook, String entryToFind) {
+
+
+            int left = 0;
+            int right = sortedPhonebook.size() - 1;
+
+            while ( left <= right) {
+                int middle = (left + right)/2;
+              //  System.out.println("middle value: " + middle);
+
+                if (sortedPhonebook.get(middle).getName().equals(entryToFind)) {
+             //       System.out.println("Entry found at index: " + middle);
+                    return middle;
+                } else if (sortedPhonebook.get(middle).getName().compareTo(entryToFind) > 0) {
+                    right = middle - 1;
+            //        System.out.println("right value: " + right);
+                } else {
+                    left = middle + 1;
+           //         System.out.println("left value: " + left);
+                }
+            }
+            // if not found, return -1
+           // System.out.println("Entry not found.");
+            return -1;
+        }
+    }
+  learner_created: true
+- name: src/phonebook/domain/TimeDuration.java
+  visible: true
+  text: |
+    package phonebook.domain;
+
+    public class TimeDuration {
+
+        long minutes;
+        long seconds;
+        long milliseconds;
+
+        public TimeDuration(long timeStart, long timeEnd) {
+            long timeTakenLinear = (timeEnd - timeStart);
+            this.minutes = timeTakenLinear/60000;
+            this.seconds = (timeTakenLinear - this.minutes*60000)/1000;
+            this.milliseconds =
+                    (timeTakenLinear - this.minutes *60000 - this.seconds*1000);
+        }
+
+        public long getMinutes() {
+            return minutes;
+        }
+
+        public long getSeconds() {
+            return seconds;
+        }
+
+        public long getMilliseconds() {
+            return milliseconds;
+        }
+    }
+  learner_created: true
+- name: src/phonebook/sort/BubbleSort.java
+  visible: true
+  text: |
+    package phonebook.sort;
+
+    import phonebook.domain.PhoneBookEntry;
+    import phonebook.domain.TimeDuration;
+
+    import java.io.FileWriter;
+    import java.io.IOException;
+    import java.util.ArrayList;
+    import java.util.List;
+    import java.util.Optional;
+
+    // This bubble sort algorithm is currently applicable only to PhonebookEntry objects.
+    // It may be good to investigate how to make it applicable to more classes, either by using Generics or by using
+    // Interfaces.
+    public class BubbleSort {
+
+
+        FileWriter sortDetailsWriter;
+
+        public Optional<List<PhoneBookEntry>> sortPhoneBook(List<PhoneBookEntry> unsortedPhoneBook, boolean ascending,
+                                                            long maxduration, boolean exportDetails) throws IOException {
+
+            if (!ascending) {
+                throw new RuntimeException("Only ascending sorting is currently supported");
+            }
+
+            long startTime = System.currentTimeMillis();
+
+            List<PhoneBookEntry> toSortPhoneBook = new ArrayList<PhoneBookEntry>(unsortedPhoneBook);
+
+            if (exportDetails) {
+                sortDetailsWriter = new FileWriter("bubbleSortDetails.txt");
+            }
+
+
+            PhoneBookEntry tempEntry;
+            boolean changesOccuredInLastLoop;
+            int countIters = 0;
+            int numberOfChangesInIter;
+
+            do {
+                changesOccuredInLastLoop = false;
+                numberOfChangesInIter = 0;
+                for (int i = 0; i < toSortPhoneBook.size() - 1; i++) {
+                    if (toSortPhoneBook.get(i).compareTo(toSortPhoneBook.get(i + 1)) > 0) {
+                        tempEntry = toSortPhoneBook.get(i);
+                        toSortPhoneBook.set(i, toSortPhoneBook.get(i + 1));
+                        toSortPhoneBook.set(i + 1, tempEntry);
+                        changesOccuredInLastLoop = true;
+                        numberOfChangesInIter++;
+                    }
+                }
+                countIters++;
+                if (exportDetails) {
+                    String message = "Finished " + countIters + " iteration, with " + numberOfChangesInIter + " changes";
+                    System.out.println(message);
+                    sortDetailsWriter.write(message + System.lineSeparator());
+                }
+                if (System.currentTimeMillis() - startTime > maxduration) {
+                    return Optional.empty();
+                }
+            } while (changesOccuredInLastLoop);
+
+            if (exportDetails) {
+                sortDetailsWriter.close();
+            }
+
+            return Optional.of(toSortPhoneBook);
+
+        }
+    }
+  learner_created: true
 feedback_link: https://hyperskill.org/learn/step/7721#comment
 status: Unchecked
 record: -1
